@@ -10,24 +10,19 @@
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "EXAMPLE_PARAM_ONE": {
+                    "wallet_address": {
                         "type": "string",
-                        "description": "EXAMPLE_PARAM_ONE_DESCRIPTION"
-                    },
-                    "EXAMPLE_PARAM_TWO": {
-                        "type": "string",
-                        "description": "EXAMPLE_PARAM_TWO_DESCRIPTION"
+                        "description": "The wallet address to check balance for. Can be either an Ethereum-style address (0x...) or a Filecoin testnet address (t0..., t1..., t2..., t3..., t4..., or t410f...)"
                     }
                 },
                 "required": [
-                    "EXAMPLE_PARAM_ONE",
-                    "EXAMPLE_PARAM_TWO"
+                    "wallet_address"
                 ],
                 "additionalProperties": false
             }
         }
     },
     "envVars": [
-        "ENV_VAR_ONE"
+        "FILECOIN_TESTNET_API_KEY"
     ]
 }

@@ -5,27 +5,30 @@ type RawEvent = {
 }
 
 type ParsedEvent = {
-    args: Record<string, string>;
-    secrets: Record<string, string>;
+    args: {
+        wallet_address: string;
+    };
+    secrets: {
+        FILECOIN_TESTNET_API_KEY: string;
+    }
 }
 
 export async function handler(event: RawEvent) {
     const {
         args: {
-            EXAMPLE_PARAM_ONE,
-            EXAMPLE_PARAM_TWO,
+            wallet_address,
         },
         secrets: {
-            ENV_VAR_ONE
+            FILECOIN_TESTNET_API_KEY
         }
     } = JSON.parse(event.body) as ParsedEvent;
 
     try {
-        const result = await toolCall(EXAMPLE_PARAM_ONE, EXAMPLE_PARAM_TWO, ENV_VAR_ONE)
+        const result = await toolCall(wallet_address, FILECOIN_TESTNET_API_KEY);
 
         return {
             statusCode: 200,
-            body: JSON.stringify(result),
+            body: result,
         };
     } catch (error: unknown) {
         let message = '';
@@ -38,7 +41,7 @@ export async function handler(event: RawEvent) {
 
         return {
             statusCode: 500,
-            body: JSON.stringify(message),
+            body: JSON.stringify({ error: message }),
         };
     }
 }
