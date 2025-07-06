@@ -1,0 +1,33 @@
+{
+    "name": "FilHelper",
+    "description": "Get Filecoin testnet (tFIL) wallet balance for both Ethereum-style and native Filecoin addresses",
+    "schema": {
+        "type": "function",
+        "function": {
+            "name": "FilHelper",
+            "description": "Fetches the balance of a wallet address on the Filecoin Calibration testnet (tFIL tokens). Supports both Ethereum-style (0x) addresses and native Filecoin testnet addresses.",
+            "strict": true,
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "EXAMPLE_PARAM_ONE": {
+                        "type": "string",
+                        "description": "EXAMPLE_PARAM_ONE_DESCRIPTION"
+                    },
+                    "EXAMPLE_PARAM_TWO": {
+                        "type": "string",
+                        "description": "EXAMPLE_PARAM_TWO_DESCRIPTION"
+                    }
+                },
+                "required": [
+                    "EXAMPLE_PARAM_ONE",
+                    "EXAMPLE_PARAM_TWO"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },
+    "envVars": [
+        "ENV_VAR_ONE"
+    ]
+}
