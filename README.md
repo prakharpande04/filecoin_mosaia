@@ -143,17 +143,6 @@ exports.Mosaia = async ({ wallet_address }) => {
 
 ---
 
-## 🛠️ Need Help?
-
-Let me know if you'd like help scaffolding:
-
-- The `.mosaia` manifest
-- Adding `.env` support
-- CI/CD pipelines
-- A sample `test:request` postman payload
-
----
-
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -169,9 +158,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 5. Open a Pull Request
 
 ---
-
-## 📞 Support
-
-For issues and questions:
-- Open an issue on [GitHub](https://github.com/prakharpande04/filecoin_mosaia/issues)
-- Contact the maintainer: [@prakharpande04](https://github.com/prakharpande04)
