@@ -1,44 +1,177 @@
-# Mosaia Tool Starter
-A demo implementation of a Mosaia Tool.
+# 🚀 Filecoin tFIL Balance Checker – Mosaia Tool
 
-## Getting Started
-1. Register for an account on mosaia.ai
-2. Fork/copy this repo
-3. Install the GitHub app to the repo by clicking the "Launch App" button on: https://mosaia.ai/org/mosaia/app/github
-4. Fill out the `.mosaia` manifest file:
-- `TOOL_DISPLAY_NAME`: (user-facing) The name of the tool, displayed on the Mosaia Tool Registry. Must be unique.
-- `SHORT_TOOL_DESCRIPTION`: (user-facing) A one-sentence description of the tool, displayed in the Mosaia Tool Registry.
-- `LONG_TOOL_DESCRIPTION`: (llm-facing) A longer description of what the tool does.
-- `EXAMPLE_PARAM_ONE`, etc. (llm-facing): Any params you wish the LLM to pass to your tool.
-- `EXAMPLE_PARAM_ONE_DESCRIPTION`, etc.: (llm-facing) Descriptions of each param and what they're for.
-- `ENV_VAR_ONE`: (user-facing): When a user adds your tool to their agent they will be asked to supply values to the keys listed in `envVars`.
-5. Validate your `.mosaia` manifest file: `npm run validate:manifest`
-6. (Optional) test your tool locally: `npm run start:dev` in one terminal and `npm run test:request` in another. A Postman collection has also been provided with a test request.
-7. Push your changes to `main`. Once pushed, the deployment script will kick off. You should see your tool show up in `https://mosaia.ai/user/YOUR_USERNAME?tab=tools` in about a minute.
-8. Add your tool to an agent to test it out.
+A custom Mosaia.ai Tool that fetches the balance of a wallet address on the **Filecoin Calibration testnet** (tFIL tokens). Supports both Ethereum-style (`0x…`) and native Filecoin testnet (`t0…, t1…, t2…, t3…, t4…, t410f…`) addresses.
 
-## Manifest Validation
-The project includes a validation script that checks your `.mosaia` manifest file against the required schema:
+---
+
+## 🔧 Schema Overview
+
+This tool exposes a strict function:
+
+```jsonc
+{
+  "type": "function",
+  "function": {
+    "name": "Mosaia-ai-prod-tools-dc0fc9e4acfe",
+    "description": "Fetches the balance of a wallet address on the Filecoin Calibration testnet (tFIL tokens). Supports both Ethereum-style (0x) addresses and native Filecoin testnet addresses.",
+    "strict": true,
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "wallet_address": {
+          "type": "string",
+          "description": "The wallet address to check balance for. Can be either an Ethereum‑style address (0x…) or a Filecoin testnet address (t0…, t1…, t2…, t3…, t4…, or t410f…)"
+        }
+      },
+      "required": ["wallet_address"],
+      "additionalProperties": false
+    }
+  }
+}
+```
+
+### Function Details
+
+- **Function name**: `Mosaia-ai-prod-tools-dc0fc9e4acfe`
+- **Parameters**:
+  - `wallet_address` (required string): The address to query—supports both Ethereum and Filecoin tFIL formats.
+
+---
+
+## 📂 GitHub Repository
+
+**Repo**: [prakharpande04/filecoin_mosaia](https://github.com/prakharpande04/filecoin_mosaia)
+
+This repository contains:
+- The Mosaia manifest (`.mosaia`)
+- Implementation code (likely in Node.js or Python) that:
+  - Parses the input `wallet_address`
+  - Connects to the Filecoin Calibration testnet node or uses a public API
+  - Retrieves and returns the wallet's tFIL balance
+- Deployment setup (e.g., Dockerfile, CI/CD config) ready for Mosaia integration
+
+---
+
+## 🧰 Installation & Usage
+
+### Prerequisites
+
+- A GitHub account
+- A Mosaia.ai account with the Mosaia GitHub App installed on your repo
+
+### 1. Fork & Clone
 
 ```bash
+git clone https://github.com/prakharpande04/filecoin_mosaia.git
+cd filecoin_mosaia
+```
+
+### 2. Configure .mosaia
+
+Ensure the `.mosaia` manifest matches the schema above (it should already be present). If adding environment variables (e.g., providers or API keys), include them under `envVars`.
+
+### 3. Validate Manifest
+
+```bash
+npm install
 npm run validate:manifest
 ```
 
-This script validates:
-- **name**: Must be a string with minimum length 5, containing only alphanumeric characters and spaces
-- **description**: Must be a string with minimum length 30
-- **schema.type**: Must be "function"
-- **schema.function.name**: Must be a string with minimum length 5
-- **schema.function.description**: Must be a string with minimum length 30
-- **schema.function.strict**: Must be a boolean (optional)
-- **schema.function.parameters**: Must be a valid JSON schema object
-- **envVars**: Must be an array of strings (optional)
+This ensures compliance with Mosaia's schema requirements.
 
-See `.mosaia.example` for a valid manifest file structure.
+### 4. Build
 
-## Minimum requirements
-The only requirements for a Mosaia Tool are that it:
-1. contains a valid `.mosaia` file
-2. defines an npm `build` command
-3. `npm run build` emits transpiled code into a `dist` directory
-4. the entrypoint of the trainspiled code is `dist/index.js`.
+```bash
+npm run build
+```
+
+This should generate a `dist/` directory with the transpiled tool entrypoint (`dist/index.js`).
+
+### 5. Test Locally
+
+(Optional) Run in dev mode and issue test requests:
+
+```bash
+npm run start:dev
+npm run test:request
+```
+
+### 6. Deploy
+
+Push your changes to the main branch.
+
+- Mosaia's deployment pipeline will publish the tool within ~1 minute.
+- You'll find it under your Mosaia tools dashboard.
+
+---
+
+## 🧩 Using the Tool
+
+Once deployed, invoke the tool via the Mosaia agent:
+
+```json
+{
+  "tool": "Mosaia-ai-prod-tools-dc0fc9e4acfe",
+  "parameters": {
+    "wallet_address": "t1xyz…"  // or "0xAbCd…"
+  }
+}
+```
+
+The tool will respond with the current tFIL balance.
+
+---
+
+## ✅ Requirements Recap
+
+- `.mosaia` manifest (as shown above)
+- `npm run build` → `dist/` folder with `dist/index.js` entrypoint
+- Optional `.env` variables configured in `envVars`
+- Working implementation that queries Filecoin testnet balance
+
+---
+
+## 🔗 Local Example
+
+```javascript
+// dist/index.js (simplified)
+exports.Mosaia = async ({ wallet_address }) => {
+  // Your logic: validate address, connect to testnet or API, fetch balance
+  return { balance: "123.456 tFIL" };
+};
+```
+
+---
+
+## 🛠️ Need Help?
+
+Let me know if you'd like help scaffolding:
+
+- The `.mosaia` manifest
+- Adding `.env` support
+- CI/CD pipelines
+- A sample `test:request` postman payload
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📞 Support
+
+For issues and questions:
+- Open an issue on [GitHub](https://github.com/prakharpande04/filecoin_mosaia/issues)
+- Contact the maintainer: [@prakharpande04](https://github.com/prakharpande04)
